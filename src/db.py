@@ -11,9 +11,15 @@ def dict_factory(cursor, row):
 
 def init():
     global con, cur
-    con = sqlite3.connect("recipes.db")
+    con = sqlite3.connect("recipes.db", check_same_thread=False)
     con.row_factory = dict_factory
     cur = con.cursor()
+
+
+def get_instructions_of_recipe(recipe_id):
+    print(recipe_id)
+    cur.execute("SELECT * FROM instruction_recipe WHERE recipe_id = ? ORDER BY ord ASC", (recipe_id, ))
+    return cur.fetchall()
 
 
 def deconstruct(data):
@@ -35,15 +41,25 @@ def insert_values(data):
     con.commit()
 
 
-# {"table_name": [{"col1": val1, "col2": val2}] } etc
+def get_values(data):
+    table_name, columns, values = deconstruct(data)
+    execute_select_query(table_name, columns, values)
+    return cur.fetchall()
+
+
 def get_value(data):
     table_name, columns, values = deconstruct(data)
+    execute_select_query(table_name, columns, values)
+    return cur.fetchone()
+
+
+def execute_select_query(table_name, columns, values):
     if len(values) != 1:
         return None
     condition_string = "AND ".join([ f"{col} = ?" for col in columns])
-    print(condition_string, values)
     cur.execute(f"SELECT * FROM {table_name} WHERE {condition_string}", values[0])
-    return cur.fetchone()
+
+
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 #!/bin/bash
 source .venv/bin/activate
-export FLASK_APP=api/api.py
+export FLASK_APP=src/api.py
 export FLASK_ENV=development
-flask run
+flask run --eager-loading
 
