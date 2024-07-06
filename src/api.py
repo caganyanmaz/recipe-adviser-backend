@@ -35,8 +35,8 @@ def create_app(test_config=None):
 
 
     api.add_resource(Recipe, "/recipe/<int:id>")
-    api.add_resource(Ingredient, "/ingredients/<int:recipe_id>")
-    api.add_resource(Instruction, "/instructions/<int:recipe_id>")
+    api.add_resource(Ingredients, "/ingredients/<int:recipe_id>")
+    api.add_resource(Instructions, "/instructions/<int:recipe_id>")
     api.add_resource(Tag, "/tag/<int:recipe_id>")
 
     return app
